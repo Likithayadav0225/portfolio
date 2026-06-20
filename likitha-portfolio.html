@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buram Likitha — Full-Stack Developer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg-night: #102420;
+    --bg-night-2: #0A1916;
+    --paper: #ECF0EA;
+    --paper-2: #E2E8DF;
+    --amber: #F2A93B;
+    --mint: #5BBE8E;
+    --ink: #102420;
+    --ink-soft: #3C5650;
+    --paper-text: #F4F3EA;
+    --paper-text-soft: #B9D0C7;
+    --line-light: rgba(16,36,32,0.14);
+    --line-dark: rgba(244,243,234,0.16);
+    --radius: 14px;
+    --maxw: 1100px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Space Grotesk', 'Inter', sans-serif;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+  a{color:inherit;}
+  section{scroll-margin-top:64px;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+
+  /* ---------- focus ---------- */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  /* ---------- tab bar nav ---------- */
+  .tabbar{
+    position:sticky; top:0; z-index:50;
+    background:var(--bg-night-2);
+    border-bottom:1px solid var(--line-dark);
+  }
+  .tabbar-inner{
+    max-width:var(--maxw); margin:0 auto;
+    display:flex; align-items:center; gap:6px;
+    padding:0 16px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .tabbar-inner::-webkit-scrollbar{display:none;}
+  .dots{display:flex; gap:6px; padding:14px 12px 14px 4px; flex-shrink:0;}
+  .dots span{width:9px; height:9px; border-radius:50%; display:block;}
+  .dots span:nth-child(1){background:#E8625A;}
+  .dots span:nth-child(2){background:#E8B84B;}
+  .dots span:nth-child(3){background:#5BBE8E;}
+  .tab{
+    flex-shrink:0;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    color:var(--paper-text-soft);
+    text-decoration:none;
+    padding:14px 14px;
+    border-bottom:2px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+    white-space:nowrap;
+  }
+  .tab:hover, .tab.active{
+    color:var(--paper-text);
+    border-bottom-color:var(--amber);
+  }
+  .tab .dim{color:var(--ink-soft); opacity:.6;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    background:var(--bg-night);
+    color:var(--paper-text);
+    padding:96px 0 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(560px 320px at 85% -10%, rgba(242,169,59,0.16), transparent 60%),
+      radial-gradient(420px 280px at -5% 110%, rgba(91,190,142,0.14), transparent 60%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative; max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  .status-chip{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    color:var(--mint);
+    background:rgba(91,190,142,0.1);
+    border:1px solid rgba(91,190,142,0.35);
+    padding:6px 12px;
+    border-radius:999px;
+    margin-bottom:28px;
+  }
+  .status-chip .blip{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--mint);
+    box-shadow:0 0 0 0 rgba(91,190,142,0.6);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(91,190,142,0.5);}
+    70%{box-shadow:0 0 0 8px rgba(91,190,142,0);}
+    100%{box-shadow:0 0 0 0 rgba(91,190,142,0);}
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 6vw, 4.4rem);
+    font-weight:700;
+    line-height:1.05;
+  }
+  .hero h1 .line2{
+    display:block;
+    color:var(--amber);
+  }
+  .cursor{
+    display:inline-block;
+    width:.5ch;
+    background:var(--amber);
+    margin-left:4px;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+  .hero p.sub{
+    margin-top:22px;
+    max-width:580px;
+    font-size:1.05rem;
+    color:var(--paper-text-soft);
+  }
+  .hero-ctas{
+    margin-top:36px;
+    display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .btn{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:.95rem;
+    padding:13px 22px;
+    border-radius:999px;
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, opacity .15s ease;
+    border:1px solid transparent;
+    cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--amber); color:#1A1304;}
+  .btn-ghost{
+    background:transparent;
+    color:var(--paper-text);
+    border-color:var(--line-dark);
+  }
+  .btn-ghost:hover{border-color:var(--paper-text-soft);}
+
+  /* ---------- marquee ---------- */
+  .marquee-wrap{
+    background:var(--bg-night-2);
+    border-top:1px solid var(--line-dark);
+    border-bottom:1px solid var(--line-dark);
+    overflow:hidden;
+    padding:13px 0;
+  }
+  .marquee-track{
+    display:flex;
+    width:max-content;
+    animation:scroll-left 28s linear infinite;
+  }
+  .marquee-track span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    color:var(--paper-text-soft);
+    padding:0 22px;
+    white-space:nowrap;
+  }
+  .marquee-track span b{color:var(--amber); font-weight:500;}
+  @keyframes scroll-left{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marquee-track{animation:none;}
+    .cursor{animation:none; opacity:1;}
+  }
+
+  /* ---------- section heading pattern ---------- */
+  .sec-head{
+    display:flex; align-items:baseline; gap:14px;
+    margin-bottom:40px;
+    flex-wrap:wrap;
+  }
+  .sec-head .file{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    color:var(--ink-soft);
+    background:rgba(16,36,32,0.06);
+    border:1px solid var(--line-light);
+    padding:4px 10px;
+    border-radius:6px;
+  }
+  .sec-head h2{font-size:clamp(1.6rem,3.4vw,2.2rem);}
+
+  section.panel{padding:80px 0;}
+  section.panel-alt{background:var(--paper-2);}
+
+  /* ---------- about ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:170px 1fr;
+    gap:48px;
+    align-items:start;
+  }
+  .monogram{
+    width:120px; height:120px;
+    border-radius:18px;
+    background:var(--bg-night);
+    color:var(--amber);
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:2.2rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .about-text p{font-size:1.02rem; color:var(--ink-soft); max-width:62ch;}
+  .facts{
+    margin-top:26px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px 28px;
+  }
+  .facts div{font-size:.92rem;}
+  .facts .label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:var(--ink-soft);
+    margin-bottom:3px;
+  }
+
+  /* ---------- experience (git log style) ---------- */
+  .timeline{
+    border-left:2px solid var(--line-light);
+    margin-left:6px;
+  }
+  .commit{
+    position:relative;
+    padding:0 0 44px 32px;
+  }
+  .commit:last-child{padding-bottom:4px;}
+  .commit::before{
+    content:"";
+    position:absolute;
+    left:-7px; top:4px;
+    width:12px; height:12px;
+    border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--amber);
+  }
+  .commit-hash{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--mint);
+    background:rgba(91,190,142,0.1);
+    padding:2px 8px;
+    border-radius:5px;
+    margin-right:10px;
+  }
+  .commit-date{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .commit h3{font-size:1.15rem; margin-top:10px;}
+  .commit .role{color:var(--ink-soft); font-size:.95rem; margin-top:2px;}
+  .commit ul{margin:14px 0 0; padding-left:18px; color:var(--ink-soft); font-size:.95rem;}
+  .commit li{margin-bottom:6px;}
+
+  /* ---------- skills ---------- */
+  .skill-groups{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:28px;
+  }
+  .skill-group .label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:var(--ink-soft);
+    margin-bottom:12px;
+  }
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    font-size:.88rem;
+    padding:7px 13px;
+    border-radius:999px;
+    background:var(--paper);
+    border:1px solid var(--line-light);
+  }
+  section.panel-alt .chip{background:var(--paper);}
+
+  /* ---------- project ---------- */
+  .editor-card{
+    border-radius:var(--radius);
+    background:var(--bg-night);
+    color:var(--paper-text);
+    overflow:hidden;
+    border:1px solid var(--line-dark);
+  }
+  .editor-top{
+    display:flex; align-items:center; gap:8px;
+    padding:12px 16px;
+    background:var(--bg-night-2);
+    border-bottom:1px solid var(--line-dark);
+  }
+  .editor-top span{width:9px; height:9px; border-radius:50%;}
+  .editor-top span:nth-child(1){background:#E8625A;}
+  .editor-top span:nth-child(2){background:#E8B84B;}
+  .editor-top span:nth-child(3){background:#5BBE8E;}
+  .editor-top .fname{
+    margin-left:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--paper-text-soft);
+  }
+  .editor-body{padding:32px;}
+  .editor-body h3{font-size:1.5rem;}
+  .editor-body .role{color:var(--paper-text-soft); font-size:.95rem; margin-top:4px;}
+  .editor-body p{color:var(--paper-text-soft); font-size:.96rem; max-width:60ch; margin-top:16px;}
+  .editor-body ul{margin:18px 0 0; padding-left:18px; color:var(--paper-text-soft); font-size:.94rem;}
+  .editor-body li{margin-bottom:7px;}
+  .tech-chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px;}
+  .tech-chips span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--amber);
+    border:1px solid rgba(242,169,59,0.4);
+    background:rgba(242,169,59,0.08);
+    padding:5px 11px;
+    border-radius:6px;
+  }
+
+  /* ---------- education ---------- */
+  .edu-cards{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  .edu-card{
+    background:var(--paper);
+    border:1px solid var(--line-light);
+    border-radius:var(--radius);
+    padding:26px;
+  }
+  .edu-card .school{font-weight:600; font-size:1.05rem;}
+  .edu-card .deg{color:var(--ink-soft); font-size:.92rem; margin-top:6px;}
+  .edu-card .meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--mint);
+    margin-top:14px;
+  }
+
+  /* ---------- contact ---------- */
+  .contact{
+    background:var(--bg-night);
+    color:var(--paper-text);
+    padding:96px 0 64px;
+    text-align:center;
+  }
+  .contact h2{
+    font-size:clamp(2rem,5vw,3.2rem);
+    font-weight:700;
+  }
+  .contact p{
+    color:var(--paper-text-soft);
+    max-width:480px;
+    margin:18px auto 0;
+  }
+  .contact-ctas{
+    display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+    margin-top:36px;
+  }
+  .footer{
+    background:var(--bg-night-2);
+    color:var(--paper-text-soft);
+    text-align:center;
+    padding:22px 0;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:760px){
+    .about-grid{grid-template-columns:1fr;}
+    .monogram{width:80px; height:80px; font-size:1.6rem;}
+    .facts{grid-template-columns:1fr;}
+    .edu-cards{grid-template-columns:1fr;}
+    .editor-body{padding:22px;}
+    section.panel{padding:60px 0;}
+    .hero{padding:72px 0 48px;}
+  }
+</style>
+</head>
+<body>
+
+  <header class="tabbar">
+    <div class="tabbar-inner">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <a class="tab active" href="#home">home<span class="dim">.tsx</span></a>
+      <a class="tab" href="#about">about<span class="dim">.tsx</span></a>
+      <a class="tab" href="#experience">experience<span class="dim">.log</span></a>
+      <a class="tab" href="#skills">skills<span class="dim">.json</span></a>
+      <a class="tab" href="#projects">projects<span class="dim">/</span></a>
+      <a class="tab" href="#education">education<span class="dim">.md</span></a>
+      <a class="tab" href="#contact">contact<span class="dim">.sh</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-inner">
+        <div class="status-chip"><span class="blip"></span> status: open_to_work = true</div>
+        <h1>Hi, I'm Likitha.<span class="line2" id="typed">I build full-stack web apps.<span class="cursor">&nbsp;</span></span></h1>
+        <p class="sub">BCA graduate from Rayalaseema University · Python, JavaScript &amp; MySQL · Web Dev Intern at CodTech IT Solutions · currently leveling up in full-stack development at KodNest.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#projects">View my work</a>
+          <a class="btn btn-ghost" href="#contact">Get in touch</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee-wrap" aria-hidden="true">
+      <div class="marquee-track">
+        <span>PYTHON <b>✓</b></span><span>JAVASCRIPT <b>✓</b></span><span>MYSQL <b>✓</b></span><span>HTML5 <b>✓</b></span><span>CSS3 <b>✓</b></span><span>GIT &amp; GITHUB <b>✓</b></span><span>WEB TESTING <b>✓</b></span><span>SQL <b>✓</b></span>
+        <span>PYTHON <b>✓</b></span><span>JAVASCRIPT <b>✓</b></span><span>MYSQL <b>✓</b></span><span>HTML5 <b>✓</b></span><span>CSS3 <b>✓</b></span><span>GIT &amp; GITHUB <b>✓</b></span><span>WEB TESTING <b>✓</b></span><span>SQL <b>✓</b></span>
+      </div>
+    </div>
+
+    <section id="about" class="panel">
+      <div class="wrap">
+        <div class="sec-head"><span class="file mono">about.tsx</span><h2>Who I am</h2></div>
+        <div class="about-grid">
+          <div class="monogram">BL</div>
+          <div class="about-text">
+            <p>I'm a BCA graduate from Rayalaseema University, originally from Nandyal, Andhra Pradesh. I learned to build real things early — a six-month internship at CodTech IT Solutions had me shipping features, fixing bugs, and working inside an actual codebase with Git and a team. Right now I'm sharpening my full-stack skills through a structured program at KodNest, and I'm actively looking for my first developer role.</p>
+            <div class="facts">
+              <div><div class="label">Location</div>Nandyal, Andhra Pradesh, India</div>
+              <div><div class="label">Education</div>BCA, Rayalaseema University (CGPA 8.56)</div>
+              <div><div class="label">Currently</div>Full Stack Development @ KodNest</div>
+              <div><div class="label">Looking for</div>Fresher / entry-level developer roles</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="panel panel-alt">
+      <div class="wrap">
+        <div class="sec-head"><span class="file mono">experience.log</span><h2>Where I've worked</h2></div>
+        <div class="timeline">
+          <div class="commit">
+            <span class="commit-hash mono">#kn-2026</span><span class="commit-date">May 2026 — Present</span>
+            <h3>Full Stack Development Trainee</h3>
+            <div class="role">KodNest</div>
+            <ul>
+              <li>Deepening skills across the full stack — frontend, backend, and databases — through a structured, project-based curriculum.</li>
+              <li>Building applications from scratch to apply what I learn in real, hands-on builds.</li>
+            </ul>
+          </div>
+          <div class="commit">
+            <span class="commit-hash mono">#ct-intern</span><span class="commit-date">6-month internship</span>
+            <h3>Web Development Intern</h3>
+            <div class="role">CodTech IT Solutions</div>
+            <ul>
+              <li>Built responsive web pages and UI components using HTML, CSS, and JavaScript.</li>
+              <li>Contributed to Sales Savvy, an internal CRM tool, working across the Python/MySQL backend and the front-end interface.</li>
+              <li>Used Git and GitHub to collaborate with the dev team, debug issues, and ship UI/UX improvements.</li>
+              <li>Presented project work at branch fests and college tech events.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="panel">
+      <div class="wrap">
+        <div class="sec-head"><span class="file mono">skills.json</span><h2>What I work with</h2></div>
+        <div class="skill-groups">
+          <div class="skill-group">
+            <div class="label">Languages</div>
+            <div class="chip-row">
+              <span class="chip">Python</span><span class="chip">Java (basics)</span><span class="chip">SQL</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="label">Frontend</div>
+            <div class="chip-row">
+              <span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">JavaScript</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="label">Backend &amp; Data</div>
+            <div class="chip-row">
+              <span class="chip">MySQL</span><span class="chip">Python</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <div class="label">Tools &amp; Practices</div>
+            <div class="chip-row">
+              <span class="chip">Git &amp; GitHub</span><span class="chip">Web Testing</span><span class="chip">Microsoft Office</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="panel panel-alt">
+      <div class="wrap">
+        <div class="sec-head"><span class="file mono">projects/</span><h2>Featured project</h2></div>
+        <div class="editor-card">
+          <div class="editor-top">
+            <span></span><span></span><span></span>
+            <span class="fname">sales-savvy.py</span>
+          </div>
+          <div class="editor-body">
+            <h3>Sales Savvy</h3>
+            <div class="role">CRM &amp; Sales Management Tool</div>
+            <p>A CRM system I helped build during my internship at CodTech IT Solutions, designed to track sales pipelines and customer records. I worked on the Python and MySQL backend logic as well as the front-end interface, with a focus on usability and a clean, responsive layout.</p>
+            <ul>
+              <li>Built core CRM features for managing sales records and customer data.</li>
+              <li>Worked across the Python/MySQL backend and the HTML, CSS &amp; JavaScript frontend.</li>
+              <li>Collaborated with the dev team using Git/GitHub in a real team workflow.</li>
+            </ul>
+            <div class="tech-chips">
+              <span>Python</span><span>MySQL</span><span>HTML5</span><span>CSS3</span><span>JavaScript</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" class="panel">
+      <div class="wrap">
+        <div class="sec-head"><span class="file mono">education.md</span><h2>Education</h2></div>
+        <div class="edu-cards">
+          <div class="edu-card">
+            <div class="school">Rayalaseema University</div>
+            <div class="deg">Bachelor of Computer Applications — via Sri Ramakrishna PG College, Nandyal</div>
+            <div class="meta mono">2023 – 2025 · CGPA 8.56</div>
+          </div>
+          <div class="edu-card">
+            <div class="school">Sri Chaitanya College of Education</div>
+            <div class="deg">Intermediate (BiPC)</div>
+            <div class="meta mono">Pre-university</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="wrap">
+        <h2>Let's build something.</h2>
+        <p>I'm looking for fresher / entry-level full-stack developer roles. If you're hiring — or just want to talk code — I'd love to hear from you.</p>
+        <div class="contact-ctas">
+          <a class="btn btn-primary" href="mailto:likithayadav2425@gmail.com">Email me</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/buramlikithayadav" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span class="mono">buram@portfolio:~$ thanks for stopping by_</span><br>
+    © 2026 Buram Likitha
+  </footer>
+
+  <script>
+    // typewriter for the hero second line, respecting reduced-motion
+    (function(){
+      var el = document.getElementById('typed');
+      var full = "I build full-stack web apps.";
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return; // leave static text as-is
+
+      var cursor = el.querySelector('.cursor');
+      el.childNodes[0].textContent = '';
+      var i = 0;
+      function tick(){
+        if(i <= full.length){
+          el.childNodes[0].textContent = full.slice(0, i);
+          i++;
+          setTimeout(tick, 38);
+        }
+      }
+      tick();
+    })();
+
+    // active tab highlight on scroll
+    (function(){
+      var sections = document.querySelectorAll('main section[id]');
+      var tabs = document.querySelectorAll('.tab');
+      if(!('IntersectionObserver' in window)) return;
+      var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            tabs.forEach(function(t){ t.classList.remove('active'); });
+            var match = document.querySelector('.tab[href="#' + entry.target.id + '"]');
+            if(match) match.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+      sections.forEach(function(s){ obs.observe(s); });
+    })();
+  </script>
+
+</body>
+</html>
